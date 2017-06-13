@@ -1,0 +1,145 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="NoLeft.master.cs" Inherits="Frontend_NoLeft" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title>Order Album</title>
+    <link href="css/animate.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/prettyPhoto.css" rel="stylesheet" />
+    <link href="css/price-range.css" rel="stylesheet" />
+    <link href="css/responsive.css" rel="stylesheet" />
+</head>
+<body>
+    <form runat="server">
+        <header id="header">
+            <!--header-->
+            <div class="header-middle">
+                <!--header-middle-->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="logo pull-left">
+                                 <a href="index.aspx">                              
+                                    <img src="../Images/home/Icon2.png" />
+                                </a>
+                            </div>                           
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="shop-menu pull-right">
+                                <ul class="nav navbar-nav">
+                                    <% CollectionDao dao = new CollectionDao();
+                                        if(Session["user"] != null && dao.CheckCustomer(Session["user"].ToString()))
+                                        {
+                                        %>
+                                    <li><a href="customer-profile.aspx"><i class="fa fa-user"></i>
+                                        <asp:Label ID="lblAcount" runat="server" Text=""></asp:Label></a></li>
+                                    <li><a href="cart.aspx"><i class="fa fa-shopping-cart"></i>Cart</a></li>
+                                    <li><a href="logout.aspx"><i class="fa fa-lock"></i>Logout</a></li>
+                                    <%} 
+                                      else {%>
+                                    <li><a href="cart.aspx"><i class="fa fa-shopping-cart"></i>Cart</a></li>
+                                    <li><a href="login-register.aspx"><i class="fa fa-lock"></i>Login</a></li>
+                                    <%} %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/header-middle-->
+
+            <div class="header-bottom">
+                <!--header-bottom-->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+                            </div>
+                            <div class="mainmenu pull-left">
+                                <ul class="nav navbar-nav collapse navbar-collapse">
+                                    <li><a href="Index.aspx" data-toggle="modal" class="active">Home</a></li>                                                                      
+                                    <li><a href="Contact.aspx">Contact</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="search_box pull-right">
+                                <asp:ScriptManager ID="ScriptManager2" runat="server">
+                                <Services>
+                                <asp:ServiceReference Path="~/Frontend/AutoComplete.asmx" />
+                                </Services>
+                                </asp:ScriptManager>
+                                <asp:TextBox ID="txtSearch" AutoPostBack="true" placeholder="Search" runat="server" autocomplete="off"></asp:TextBox>                            
+                                    <ajaxToolkit:AutoCompleteExtender
+                                    runat="server" 
+                                    ID="AutoCompleteExtender1" 
+                                    TargetControlID="txtSearch"
+                                    ServicePath="AutoComplete.asmx" 
+                                    ServiceMethod="GetCompletionList"
+                                    MinimumPrefixLength="2" 
+                                    CompletionInterval="1000"
+                                    EnableCaching="true"
+                                    
+                                    CompletionSetCount="12" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/header-bottom-->
+        </header>
+        <!--/header-->
+            <div class="container">
+                    <asp:ContentPlaceHolder ID="Content" runat="server">
+                    </asp:ContentPlaceHolder>
+            </div>
+        <footer id="footer">
+            <!--Footer-->
+            <div class="footer-top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="companyinfo">
+                                <h2><span>Order Album</span></h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,sed do eiusmod tempor</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-3" style="float:right">
+                            <div class="address">
+                                <img src="images/home/map.png" alt="" />                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="row">
+                        <p class="pull-left">OrderAlbum Inc. All rights reserved.</p>
+                        <p class="pull-right">Designed by <a href="../Backend/Login.aspx">Admin</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        </form>
+        <!--/Footer-->
+        <script src="js/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.scrollUp.min.js"></script>
+        <script src="js/price-range.js"></script>
+        <script src="js/jquery.prettyPhoto.js"></script>
+        <script src="js/main.js"></script>
+        <script src="../Scripts/js/fullcalendar.min.js"></script>
+</body>
+</html>

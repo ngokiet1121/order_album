@@ -1,0 +1,294 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Backend.master.cs" Inherits="Backend_Common_Backend" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Manager page</title>
+    <meta charset="utf-8">
+    <meta name="description" content="Bootstrap Metro Dashboard">
+    <meta name="author" content="Dennis Ji">
+    <meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <!-- end: Meta -->
+    <!-- start: Mobile Specific -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- end: Mobile Specific -->
+    <!-- start: CSS -->
+    <link href="css/font-awesome-ie7.min.css" rel="stylesheet" />
+    <link href="css/jquery.cleditor.css" rel="stylesheet" />
+    <link href="css/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+    <link href="css/jquery.gritter.css" rel="stylesheet" />
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/glyphicons.css" rel="stylesheet" />
+    <link href="css/halflings.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style-responsive.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
+    <!-- end: CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <!-- start: Favicon -->
+
+    <!-- end: Favicon -->
+    <script>
+        $(document).ready(function () {
+            $("#hide").click(function () {
+                $("#yesno").hide(1000);
+                $("#change").show(1000);
+                $("#hoi").hide(1000);
+                $("#yes").show(1000);
+            });
+        });
+    </script>   
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href='<%= ResolveUrl("~/Backend")%>/Index.aspx'><span>Welcome Manager</span></a>
+                
+                <!-- start: Header Menu -->
+                <div class="nav-no-collapse header-nav">
+                    <ul class="nav pull-right">
+                        <!-- start: Notifications Dropdown -->
+                        <!-- end: Notifications Dropdown -->
+                        <!-- start: Message Dropdown -->
+                        <% MessageDao msgdao = new MessageDao();
+                           List<Messages> list = msgdao.FindAllStatus2();
+                           if(list.Count > 0){
+                            %>
+                        <li class="dropdown hidden-phone">
+
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="icon-envelope"></i>
+                                    <asp:Label ID="lblAllMail" CssClass="badge red" runat="server" Text=""></asp:Label>
+                            </a>
+                            <ul class="dropdown-menu messages" style="overflow: scroll; height: 200px">
+                                <li class="dropdown-menu-title">
+                                    <span>
+                                        <asp:Label ID="lblMail" runat="server" Text=""></asp:Label>
+                                    </span>
+                                    <a href="#refresh"><i class="icon-repeat"></i></a>
+                                </li>
+                                <asp:Repeater ID="Repeater" runat="server">
+                                    <ItemTemplate>
+                                        <li>
+                                            <a href="#<%# Eval("MessageId") %>" data-toggle="modal">
+                                                <span class="header">
+                                                    <span class="from">
+                                                        <%# Eval("CustomerEmail.FullName") %>
+                                                    </span>
+                                                    <span class="time">
+                                                        <%# Eval("DateSend.Day") %>/<%# Eval("DateSend.Month") %>/<%# Eval("DateSend.Year") %>
+                                                    </span>
+                                                </span>
+                                                <span class="message">
+                                                    <%# Eval("Message") %>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </ul>
+                        </li>
+                        <%} %>
+                        <!-- start: User Dropdown -->
+                        <li class="dropdown">
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="halflings-icon white user"></i>
+                                <asp:Label ID="lblName" runat="server" Text=""></asp:Label>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-menu-title">
+                                    <span>Account Settings</span>
+                                </li>
+                                <li><a href='<%= ResolveUrl("~/Backend")%>/Profile.aspx'><i class="halflings-icon user"></i>Profile</a></li>
+                                <li><a href='<%= ResolveUrl("~/Backend")%>/ChangePass.aspx'><i class="halflings-icon user"></i>ChangPass</a></li>
+                                <li>
+                                    <a href='<%= ResolveUrl("~/Backend")%>/Logout.aspx'><i class="halflings-icon out"></i>Logout</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <!-- end: User Dropdown -->
+                    </ul>
+                </div>
+                <!-- end: Header Menu -->
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid-full" style="min-height: 1024px;">
+        <div class="row-fluid">
+            <!-- start: Main Menu -->
+            <div id="sidebar-left" style="min-height: 200%;" class="span2">
+                <div class="nav-collapse sidebar-nav">
+                    <ul class="nav nav-tabs nav-stacked main-menu">
+                        <li><a href="<%= ResolveUrl("~/Backend")%>/Messages/Message.aspx"><i class="icon-envelope"></i><span class="hidden-tablet">Messages</span></a></li>
+
+                        <li><a href="<%= ResolveUrl("~/Backend")%>/Customer/ViewList.aspx"><i class="icon-comment"></i><span class="hidden-tablet">Customer</span></a></li>
+
+                        <li>
+                            <a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet">Albums</span><span class="label label-important"> 3 </span></a>
+                            <ul>
+                                <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Album/ListAlbum.aspx"><i class="icon-align-justify"></i><span class="hidden-tablet">View List </span></a></li>
+                                <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Album/AddNewAlbum.aspx"><i class="icon-edit"></i><span class="hidden-tablet">Add New Album</span></a></li>
+                                <li>
+                                    <a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet">Made in</span><span class="label label-important"> 3 </span></a>
+                                    <ul>
+                                        <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/MadeIn/ListMadeIn.aspx"><i class="icon-align-justify"></i><span class="hidden-tablet">View List </span></a></li>
+                                        <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/MadeIn/AddMadeIn.aspx"><i class="icon-edit"></i><span class="hidden-tablet">Add New</span></a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="<%= ResolveUrl("~/Backend")%>/Orders/ListOrders.aspx"><i class="icon-comment"></i><span class="hidden-tablet">Orders</span></a></li>
+                        <li>
+                            <a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet">Groups</span><span class="label label-important"> 3 </span></a>
+                            <ul>
+                                <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Groups/ListGroup.aspx"><i class="icon-align-justify"></i><span class="hidden-tablet">View List </span></a></li>
+                                <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Groups/AddGroup.aspx"><i class="icon-edit"></i><span class="hidden-tablet">Add New</span></a></li>
+                                <li>
+                                    <a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet">Banners</span><span class="label label-important"> 3 </span></a>
+                                    <ul>
+                                        <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Banner/ListBanner.aspx"><i class="icon-align-justify"></i><span class="hidden-tablet">View List </span></a></li>
+                                        <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Banner/AddNewBanner.aspx"><i class="icon-edit"></i><span class="hidden-tablet">Add New</span></a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet">Singers</span><span class="label label-important"> 3 </span></a>
+                            <ul>
+                                <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Singers/ListSingers.aspx"><i class="icon-align-justify"></i><span class="hidden-tablet">View List </span></a></li>
+                                <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Singers/AddNewSinger.aspx"><i class="icon-edit"></i><span class="hidden-tablet">Add New</span></a></li>
+                                <li>
+                                    <a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet">Nationalities</span><span class="label label-important"> 3 </span></a>
+                                    <ul>
+                                        <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Nationalities/ListNationality.aspx"><i class="icon-align-justify"></i><span class="hidden-tablet">View List </span></a></li>
+                                        <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Nationalities/Addnew.aspx"><i class="icon-edit"></i><span class="hidden-tablet">Add New</span></a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet">Songs</span><span class="label label-important"> 3 </span></a>
+                            <ul>
+                                <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Songs/ListSong.aspx"><i class="icon-align-justify"></i><span class="hidden-tablet">View List </span></a></li>
+                                <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Songs/AddNewSongs.aspx"><i class="icon-edit"></i><span class="hidden-tablet">Add New</span></a></li>
+                                <li>
+                                    <a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet">Genres</span><span class="label label-important"> 3 </span></a>
+                                    <ul>
+                                        <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Genres/ListGenres.aspx"><i class="icon-align-justify"></i><span class="hidden-tablet">View List </span></a></li>
+                                        <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Genres/AddGenres.aspx"><i class="icon-edit"></i><span class="hidden-tablet">Add New</span></a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="<%= ResolveUrl("~/Backend")%>/Shipments/ListShipment.aspx"><i class="icon-comment"></i><span class="hidden-tablet">Shipment</span></a></li>
+
+                        <li><a href="<%= ResolveUrl("~/Backend")%>/Comments/ListComment.aspx"><i class="icon-comment"></i><span class="hidden-tablet">Comments</span></a></li>
+                        <li><a href="<%= ResolveUrl("~/Backend")%>/Rates/ListRate.aspx"><i class="icon-star"></i><span class="hidden-tablet">Rates</span></a></li>
+                        <li><a href="<%= ResolveUrl("~/Backend")%>/CodeDiscount/ListCodeDiscount.aspx"><i class="icon-envelope"></i><span class="hidden-tablet">CodeDiscount</span></a></li>
+                        <% CollectionDao dao = new CollectionDao();
+
+                           if (dao.CheckAdmin(Session["staff"].ToString(), 1))
+                           {
+                        %>
+                        <li>
+                            <a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet">Staff(Active only admin)</span><span class="label label-important"> 3 </span></a>
+                            <ul>
+                                <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Staff/ListStaff.aspx"><i class="icon-align-justify"></i><span class="hidden-tablet">View List </span></a></li>
+                                <li><a class="submenu" href="<%= ResolveUrl("~/Backend")%>/Staff/AddNewStaff.aspx"><i class="icon-edit"></i><span class="hidden-tablet">Add New</span></a></li>
+                            </ul>
+                        </li>
+                        <%} %>
+                    </ul>
+                </div>
+            </div>
+            <!-- end: Main Menu -->
+            <!-- start: Content -->
+            <div id="content" class="span10">
+                <asp:ContentPlaceHolder ID="ContentAdmin" runat="server">
+                </asp:ContentPlaceHolder>
+            </div>
+            <!--/.fluid-container-->
+
+            <!-- end: Content -->
+        </div>
+        <!--/#content.span10-->
+    </div>
+    <!--/fluid-row-->
+
+    <footer>
+
+        <p>
+            <span style="text-align: left; float: left">&copy; 2016 <a href="" alt="Bootstrap_Metro_Dashboard">JANUX Responsive Dashboard</a></span>
+
+        </p>
+
+    </footer>
+
+    <script src="../../Scripts/js/jquery-1.9.1.min.js"></script>
+    <script src="../../Scripts/js/jquery-migrate-1.0.0.min.js"></script>
+
+    <script src="../../Scripts/js/jquery-ui-1.10.0.custom.min.js"></script>
+
+    <script src="../../Scripts/js/jquery.ui.touch-punch.js"></script>
+
+    <script src="../../Scripts/js/modernizr.js"></script>
+
+    <script src="../../Scripts/js/bootstrap.min.js"></script>
+
+    <script src="../../Scripts/js/jquery.cookie.js"></script>
+
+    <script src='../../Scripts/js/fullcalendar.min.js'></script>
+
+    <script src='../../Scripts/js/jquery.dataTables.min.js'></script>
+
+    <script src="../../Scripts/js/excanvas.js"></script>
+    <script src="../../Scripts/js/jquery.flot.js"></script>
+    <script src="../../Scripts/js/jquery.flot.pie.js"></script>
+    <script src="../../Scripts/js/jquery.flot.stack.js"></script>
+    <script src="../../Scripts/js/jquery.flot.resize.min.js"></script>
+
+    <script src="../../Scripts/js/jquery.chosen.min.js"></script>
+
+    <script src="../../Scripts/js/jquery.uniform.min.js"></script>
+
+    <script src="../../Scripts/js/jquery.cleditor.min.js"></script>
+
+    <script src="../../Scripts/js/jquery.noty.js"></script>
+
+    <script src="../../Scripts/js/jquery.elfinder.min.js"></script>
+
+    <script src="../../Scripts/js/jquery.raty.min.js"></script>
+
+    <script src="../../Scripts/js/jquery.iphone.toggle.js"></script>
+
+    <script src="../../Scripts/js/jquery.uploadify-3.1.min.js"></script>
+
+    <script src="../../Scripts/js/jquery.gritter.min.js"></script>
+
+    <script src="../../Scripts/js/jquery.imagesloaded.js"></script>
+
+    <script src="../../Scripts/js/jquery.masonry.min.js"></script>
+
+    <script src="../../Scripts/js/jquery.knob.modified.js"></script>
+
+    <script src="../../Scripts/js/jquery.sparkline.min.js"></script>
+
+    <script src="../../Scripts/js/counter.js"></script>
+
+    <script src="../../Scripts/js/retina.js"></script>
+
+    <script src="../../Scripts/js/custom.js"></script>
+</body>
+</html>

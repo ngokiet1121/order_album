@@ -1,0 +1,338 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Frontend.master.cs" Inherits="Frontend_Common_FrontEnd" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Order Album</title>
+    <link href="css/animate.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/prettyPhoto.css" rel="stylesheet" />
+    <link href="css/price-range.css" rel="stylesheet" />
+    <link href="css/responsive.css" rel="stylesheet" />
+ 
+    <script src="js/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#show").click(function () {
+                $("#editform").show();
+                $("#cusprofile").hide();
+            });
+            $("#show2").click(function () {
+                $("#changePass").show();
+                $("#cusprofile").hide();
+            });
+            $("#cancel").click(function () {
+                $("#editform").hide();
+                $("#cusprofile").show();
+            });
+            $("#cancel2").click(function () {
+                $("#changePass").hide();
+                $("#cusprofile").show();
+            });
+        });
+
+        function validateForm() {
+            var x = document.forms["myForm"]["fname"].value;
+            if (x == null || x == "") {
+                alert("Name must be filled out");
+                return false;
+            }
+        }
+    </script>
+    <style>
+        .inputinput {                       
+        background: #F0F0E9;
+            border: medium none;
+            color: #696763;
+            display: block;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 300;
+            height: 40px;
+            margin-bottom: 10px;
+            outline: medium none;
+            padding-left: 10px;
+            width: 140%;                                           
+        }
+    </style>
+</head>
+<body>
+
+    <form runat="server" name="myForm">
+        <header id="header">
+            <!--header-->
+            <div class="header-middle">
+                <!--header-middle-->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="logo pull-left">
+                                <a href="index.aspx">                              
+                                    <img src="../Images/home/Icon2.png" />
+                                </a>
+                            </div>
+                            
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="shop-menu pull-right">
+                                <ul class="nav navbar-nav">
+                                    <% CollectionDao dao = new CollectionDao();
+                                       if (Session["user"] != null && dao.CheckCustomer(Session["user"].ToString()))
+                                       {
+                                    %>
+                                    <li><a href="customer-profile.aspx"><i class="fa fa-user"></i>
+                                        <asp:Label ID="lblAcount" runat="server" Text=""></asp:Label></a></li>
+                                    <li><a href="cart.aspx"><i class="fa fa-shopping-cart"></i>Cart</a></li>
+                                    <li><a href="logout.aspx"><i class="fa fa-lock"></i>Logout</a></li>
+                                    <%}
+                                        else
+                                        {%>
+                                    <li><a href="cart.aspx"><i class="fa fa-shopping-cart"></i>Cart</a></li>
+                                    <li><a href="login-register.aspx"><i class="fa fa-lock"></i>Login</a></li>
+                                    <%} %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/header-middle-->
+
+            <div class="header-bottom">
+                <!--header-bottom-->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+                            </div>
+                            <div class="mainmenu pull-left">
+                                <ul class="nav navbar-nav collapse navbar-collapse">
+                                    <li><a href="Index.aspx" class="active">Home</a></li>                                                                      
+                                    <li><a href="Contact.aspx">Contact</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="search_box pull-right">                         
+                                <asp:ScriptManager ID="ScriptManager2" runat="server">
+                                <Services>
+                                <asp:ServiceReference Path="~/Frontend/AutoComplete.asmx" />
+                                </Services>
+                                </asp:ScriptManager>
+                                <asp:TextBox ID="txtSearch" AutoPostBack="true" OnTextChanged="txtSearch_TextChanged" placeholder="Search" runat="server" autocomplete="off"></asp:TextBox>                            
+                                    <ajaxToolkit:AutoCompleteExtender
+                                    runat="server" 
+                                    ID="AutoCompleteExtender1" 
+                                    TargetControlID="txtSearch"
+                                    ServicePath="AutoComplete.asmx" 
+                                    ServiceMethod="GetCompletionList"
+                                    MinimumPrefixLength="2" 
+                                    CompletionInterval="1000"
+                                    EnableCaching="true"
+                                    CompletionSetCount="12" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/header-bottom-->
+        </header>
+        <!--/header-->
+
+        <section id="slider">
+            <!--slider-->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="slider-carousel" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li data-target="#slider-carousel" data-slide-to="0" class="active"></li>
+                                <li data-target="#slider-carousel" data-slide-to="1"></li>
+                                <li data-target="#slider-carousel" data-slide-to="2"></li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <div class="item active">
+                                    <div class="col-sm-6">
+                                        <asp:Image ID="Image1" Style="margin-left: -115px" runat="server" />
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="col-sm-6">
+                                        <asp:Image ID="Image2" Style="margin-left: -115px" runat="server" />
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="col-sm-6">
+                                        <asp:Image ID="Image3" Style="margin-left: -115px" runat="server" />
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a href="#slider-carousel" class="right control-carousel hidden-xs" data-slide="next">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--/slider-->
+
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="left-sidebar">
+                            <h2>Category</h2>
+                            <div class="panel-group category-products" id="accordian">
+                                <!--category-productsr-->
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordian" href="#group">
+                                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                                                Group
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="group" class="panel-collapse collapse">
+                                        <asp:Repeater ID="RepeaterGroup" runat="server">
+                                            <HeaderTemplate>
+                                                <div class="panel-body">
+                                                    <ul>
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <li><a href="ProductBySubject.aspx?idgroup=<%# Eval("GroupId") %>"><%# Eval("Name") %> </a></li>
+                                            </ItemTemplate>
+                                            <FooterTemplate>
+                                                </ul>
+                                                </div>
+                                            </FooterTemplate>
+                                        </asp:Repeater>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordian" href="#genres">
+                                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                                                Genres
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="genres" class="panel-collapse collapse">
+                                        <asp:Repeater ID="RepeaterGenres" runat="server">
+                                            <HeaderTemplate>
+                                                <div class="panel-body">
+                                                    <ul>
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <li><a href="ProductBySubject.aspx?idgenres=<%# Eval("GenresId") %>"><%# Eval("Name") %> </a></li>
+                                            </ItemTemplate>
+                                            <FooterTemplate>
+                                                </ul>
+                                                </div>
+                                            </FooterTemplate>
+                                        </asp:Repeater>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordian" href="#producers">
+                                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                                                Producers
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="producers" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <asp:Repeater ID="RepeaterProducer" runat="server">
+                                                <HeaderTemplate>
+                                                    <div class="panel-body">
+                                                        <ul>
+                                                </HeaderTemplate>
+                                                <ItemTemplate>
+                                                    <li><a href="ProductBySubject.aspx?idProducer=<%# Eval("ProducerId") %>"><%# Eval("Name") %></a></li>
+                                                </ItemTemplate>
+                                                <FooterTemplate>
+                                                    </ul>
+                                                </div>
+                                                </FooterTemplate>
+                                            </asp:Repeater>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title"><a href="ProductBySubject.aspx?status=1">Pre Order</a></h4>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title"><a href="ProductBySubject.aspx?status=2">Available</a></h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/category-products-->
+                            <!--/brands_products-->
+                        </div>
+                    </div>
+                    <asp:ContentPlaceHolder ID="Content" runat="server">
+                    </asp:ContentPlaceHolder>
+                </div>
+            </div>
+        </section>
+        <footer id="footer">
+            <!--Footer-->
+            <div class="footer-top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="companyinfo">
+                                <h2><span>Order Album</span></h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,sed do eiusmod tempor</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-3" style="float:right">
+                            <div class="address">
+                                <img src="images/home/map.png" alt="" />                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="row">
+                        <p class="pull-left">OrderAlbum Inc. All rights reserved.</p>
+                        <p class="pull-right">Designed by <a href="../Backend/Login.aspx">Admin</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!--/Footer-->
+        <script src="js/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.scrollUp.min.js"></script>
+        <script src="js/price-range.js"></script>
+        <script src="js/jquery.prettyPhoto.js"></script>
+        <script src="js/main.js"></script>
+        <script src="../Scripts/js/fullcalendar.min.js"></script>
+
+    </form>
+</body>
+</html>
